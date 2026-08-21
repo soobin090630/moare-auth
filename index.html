@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07151d" />
+    <title>인증했무아? — Moiré 인증</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./fix.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <nav><a class="brand" href="#"><span class="brand-mark">M</span>인증했무아?</a><span class="nav-status"><i></i> PROTOTYPE 01 <button class="nav-logout hidden" id="navLogout">로그아웃</button> <button class="admin-link" id="adminBtn">관리자</button></span></nav>
+
+      <section id="welcome" class="welcome">
+        <div class="eyebrow">PHYSICAL + DIGITAL SECURITY</div>
+        <h1>당신만 볼 수 있는<br /><em>인증의 순간.</em></h1>
+        <p class="intro">개인 무아레 카드와 일회용 패턴을 겹쳐, 화면 속에 숨겨진 인증 코드를 읽어내세요.</p>
+        <div class="welcome-actions">
+          <button class="primary" id="startBtn">인증 시작하기 <span>→</span></button>
+          <button class="text-button" id="howBtn">작동 원리 보기</button>
+        </div>
+        <div class="hero-art" aria-hidden="true"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="noise-text">MOIRÉ<br/>MOIRÉ<br/>MOIRÉ</div></div>
+      </section>
+
+      <section id="auth" class="auth hidden">
+        <button class="back" id="backBtn">← 처음으로</button>
+        <div class="auth-grid">
+          <div class="auth-copy"><div class="eyebrow">STEP <span id="stepNumber">01</span> / 02</div><h2 id="authTitle">계정으로<br />입장하세요.</h2><p id="authText">등록한 이메일과 비밀번호를 입력해<br />무아레 인증을 시작합니다.</p><div class="tip"><span>✦</span><p><b>데모 계정</b><br />student@moa.test / moa2026!</p></div></div>
+          <div class="panel" id="loginPanel">
+            <form id="loginForm">
+              <label>이메일<input required type="email" id="email" value="student@moa.test" autocomplete="email" /></label>
+              <label>비밀번호<input required type="password" id="password" value="moa2026!" autocomplete="current-password" /></label>
+              <p class="form-error" id="loginError"></p>
+              <button class="primary full" type="submit">다음 <span>→</span></button>
+            </form>
+            <div class="social-divider"><span>또는 소셜 계정으로</span></div>
+            <div class="social-buttons"><button class="social google" id="googleBtn" type="button"><b>G</b> Google로 계속하기</button><button class="social naver" id="naverBtn" type="button"><b>N</b> 네이버로 계속하기</button></div>
+            <div class="panel-footer">처음이신가요? <button id="signupBtn">회원가입하기</button></div>
+          </div>
+          <div class="panel hidden" id="issuePanel">
+            <div class="issue-heading"><span class="label">ACCOUNT SIGN UP</span><h3>먼저 회원가입을<br />완료해 주세요.</h3><p>가입이 끝나면 관리자가 사용자별 카드를 인쇄해 발급합니다.</p></div>
+            <form id="issueForm">
+              <label>이름<input required id="issueName" placeholder="홍길동" autocomplete="name" /></label>
+              <label>이메일<input required id="issueEmail" type="email" placeholder="you@example.com" autocomplete="email" /></label>
+              <label>비밀번호<input required id="issuePassword" type="password" minlength="6" placeholder="6자 이상" autocomplete="new-password" /></label>
+              <div class="issued-card" id="issuedCard"><div class="card-top"><span>인증했무아?</span><span>MOIRÉ ID</span></div><div class="card-lines"></div><div class="card-bottom"><span id="issueCardId">M-READY</span><span id="issuePitch">PITCH —</span></div></div>
+              <p class="issue-note">발급 후 카드 규격(85.60 × 53.98 mm)에 맞춰 인쇄 업체로 전달합니다.</p>
+              <button class="primary full" type="submit">회원가입 완료 <span>→</span></button>
+            </form>
+            <div class="social-divider"><span>소셜 계정으로 회원가입</span></div>
+            <div class="social-buttons"><button class="social google" id="googleSignupBtn" type="button"><b>G</b> Google로 가입</button><button class="social naver" id="naverSignupBtn" type="button"><b>N</b> 네이버로 가입</button></div>
+            <div class="panel-footer"><button id="issueBack">로그인으로 돌아가기</button></div>
+          </div>
+          <div class="panel hidden" id="challengePanel">
+            <div class="challenge-head"><div><span class="label">YOUR MOIRÉ CHALLENGE</span><strong id="cardId">CARD —</strong></div><span class="timer" id="timer">01:00</span></div>
+            <div class="moire-wrap"><canvas id="moireCanvas" width="720" height="390" aria-label="무아레 인증 패턴"></canvas><div class="guide-corners"></div><div class="virtual-card hidden" id="virtualCard"><span>인증했무아?</span><div></div><small id="cardSpacing">PITCH —</small></div></div>
+            <p class="challenge-guide">실물 카드를 화면의 안내선에 맞춰 올려<br />숨겨진 6자리 코드를 확인해 주세요.</p>
+            <button class="retry-challenge hidden" id="retryChallenge" type="button">↻ 인증 새로고침</button>
+            <form id="verifyForm" class="verify-form"><label>확인한 인증 코드<input required inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" id="code" autocomplete="one-time-code" /></label><p class="form-error" id="verifyError"></p><button class="primary full" type="submit">인증 완료 <span>→</span></button></form>
+          </div>
+          <div class="panel hidden success-panel" id="successPanel"><div class="success-icon">✓</div><span class="label">VERIFIED</span><h3>인증이<br />완료됐습니다.</h3><p>무아레 카드가 확인되었습니다.<br />안전하게 입장합니다.</p><button class="primary full" id="restartBtn">로그아웃하고 처음으로</button></div>
+        </div>
+      </section>
+
+      <section id="how" class="how hidden"><button class="back" id="howBack">← 처음으로</button><div class="eyebrow">HOW IT WORKS</div><h2>나만의 줄무늬가<br />보안을 만듭니다.</h2><div class="steps"><article><b>01</b><h3>개인 카드</h3><p>카드마다 서로 다른 간격의 무아레 필터를 인쇄합니다.</p></article><article><b>02</b><h3>일회용 패턴</h3><p>로그인할 때마다 새 코드가 숨겨진 화면 패턴을 생성합니다.</p></article><article><b>03</b><h3>겹쳐서 확인</h3><p>본인의 카드와 맞을 때만 코드가 선명하게 드러납니다.</p></article></div></section>
+      <section id="admin" class="admin hidden"><button class="back" id="adminBack">← 사이트로 돌아가기</button><div class="eyebrow">ADMIN CONSOLE</div><div class="admin-head"><div><h2>카드 발급 관리</h2><p>등록된 사용자와 인쇄 정보를 관리합니다.</p></div><button class="primary" id="printAll">전체 인쇄 목록 <span>↗</span></button></div><div class="admin-stats"><div><span>등록 사용자</span><strong id="userCount">0</strong></div><div><span>발급 대기</span><strong id="pendingCount">0</strong></div><div><span>카드 규격</span><strong>ID-1</strong></div></div><div class="user-table-wrap"><table><thead><tr><th>사용자</th><th>이메일</th><th>카드 ID</th><th>고유 간격</th><th>상태</th><th></th></tr></thead><tbody id="userRows"></tbody></table></div></section>
+    </main>
+    <div id="toast" role="status"></div>
+    <dialog id="adminLogin"><form method="dialog" id="adminLoginForm"><span class="label">ADMIN ACCESS</span><h3>관리자 로그인</h3><p>관리자만 카드 발급 정보를 볼 수 있습니다.</p><input required type="password" id="adminPassword" placeholder="관리자 비밀번호" /><p class="form-error" id="adminError"></p><button class="primary full" value="login">관리자 로그인 <span>→</span></button><button class="dialog-cancel" value="cancel">취소</button></form></dialog>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

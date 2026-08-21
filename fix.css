@@ -1,0 +1,29 @@
+/* The bare challenge must carry texture only; readable digits appear after the card overlay. */
+.virtual-card small { z-index: 3; }
+.nav-logout{margin-left:12px;border:0;background:none;color:var(--lime);font:11px 'DM Mono';cursor:pointer;text-decoration:underline}
+.moire-wrap canvas { transition: none; }
+.virtual-card {
+  background-repeat: repeat;
+  backdrop-filter: none;
+  mix-blend-mode: multiply;
+}
+.virtual-card div { opacity: .28; }
+.issue-heading h3 { font-size: 25px; letter-spacing: -1.4px; line-height: 1.3; margin: 8px 0; }
+.issue-heading p, .issue-note { color: var(--muted); font-size: 12px; line-height: 1.65; }
+.issued-card { position: relative; overflow: hidden; aspect-ratio: 1.586; margin: 10px 0 14px; padding: 14px; background: #d6e45b; color: #0a1b1e; }
+.card-top,.card-bottom { display:flex; justify-content:space-between; position:relative; z-index:2; font:10px 'DM Mono',monospace; font-weight:700; letter-spacing:.4px; }
+.card-bottom { position:absolute; bottom:14px; left:14px; right:14px; }
+.card-lines { position:absolute; inset:18px 12px 33px; opacity:.9; background:repeating-linear-gradient(93deg, transparent 0 3px,#0a1b1e 3.8px 4.7px,transparent 5.5px 8px); }
+.issue-note { margin: 0 0 13px; }
+.retry-challenge{display:block;margin:10px auto 14px;border:1px solid var(--lime);background:transparent;color:var(--lime);padding:9px 15px;cursor:pointer;font:12px Manrope}.retry-challenge:hover{background:rgba(215,255,84,.1)}
+#issuePanel .card-lines { display: none; }
+#issuePanel .issued-card { background: #d6e45b !important; }
+.admin-link{margin-left:14px;border:0;background:none;color:var(--muted);font:11px 'DM Mono';cursor:pointer;text-decoration:underline}.admin{padding-top:20px}.admin h2{font-size:48px;letter-spacing:-3px;margin:0}.admin-head{display:flex;align-items:end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:27px}.admin-head p{color:var(--muted);font-size:14px}.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}.admin-stats div{padding:22px 0;border-right:1px solid var(--line)}.admin-stats div+div{padding-left:24px}.admin-stats span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}.admin-stats strong{font:24px 'DM Mono';color:var(--lime)}.user-table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:15px}th,td{text-align:left;padding:15px 10px;border-bottom:1px solid var(--line);white-space:nowrap}th{font:10px 'DM Mono';color:var(--muted);letter-spacing:1px}td code{font:12px 'DM Mono';color:var(--lime)}.status{color:var(--lime);font-size:11px}.print-btn{border:1px solid #36545c;background:none;color:var(--ink);padding:7px 10px;cursor:pointer;font-size:11px}.print-btn:hover{border-color:var(--lime)}dialog{border:1px solid var(--line);background:#0b222a;color:var(--ink);padding:0;width:min(390px,calc(100% - 30px))}dialog::backdrop{background:rgba(0,0,0,.65)}dialog form{padding:30px}dialog h3{font-size:26px;margin:10px 0}dialog p{color:var(--muted);font-size:13px;line-height:1.6}.dialog-cancel{display:block;border:0;background:none;color:var(--muted);margin:16px auto 0;cursor:pointer}@media(max-width:760px){.admin-head{display:block}.admin-head .primary{margin-top:18px}.admin h2{font-size:38px}.admin-stats{grid-template-columns:1fr 1fr}.admin-stats div:nth-child(3){grid-column:span 2;border-top:1px solid var(--line);padding-left:0}}
+.social-divider { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11px; margin:20px 0 12px; }
+.social-divider:before,.social-divider:after { content:''; height:1px; background:var(--line); flex:1; }
+.social-buttons { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.social { border:1px solid #36545c; background:#0a2028; color:var(--ink); padding:11px 8px; font:12px Manrope; cursor:pointer; }
+.social b { display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; margin-right:5px; background:#fff; color:#4285f4; font:700 13px Arial; }
+.social.naver b { background:#03c75a; color:#fff; }
+.social:hover { border-color:var(--lime); }
+@media(max-width:760px){.social-buttons{grid-template-columns:1fr;}}
