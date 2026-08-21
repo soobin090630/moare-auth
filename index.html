@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="./fix.css" />
+    <link rel="stylesheet" href="./fix.css?v=2" />
   </head>
   <body>
     <main class="shell">
@@ -38,7 +38,7 @@
               <button class="primary full" type="submit">다음 <span>→</span></button>
             </form>
             <div class="social-divider"><span>또는 소셜 계정으로</span></div>
-            <div class="social-buttons"><button class="social google" id="googleBtn" type="button"><b>G</b> Google로 계속하기</button><button class="social naver" id="naverBtn" type="button"><b>N</b> 네이버로 계속하기</button></div>
+            <div class="social-buttons"><button class="social google" id="googleBtn" type="button"><b>G</b> Google로 계속하기</button></div>
             <div class="panel-footer">처음이신가요? <button id="signupBtn">회원가입하기</button></div>
           </div>
           <div class="panel hidden" id="issuePanel">
@@ -52,7 +52,7 @@
               <button class="primary full" type="submit">회원가입 완료 <span>→</span></button>
             </form>
             <div class="social-divider"><span>소셜 계정으로 회원가입</span></div>
-            <div class="social-buttons"><button class="social google" id="googleSignupBtn" type="button"><b>G</b> Google로 가입</button><button class="social naver" id="naverSignupBtn" type="button"><b>N</b> 네이버로 가입</button></div>
+            <div class="social-buttons"><button class="social google" id="googleSignupBtn" type="button"><b>G</b> Google로 가입</button></div>
             <div class="panel-footer"><button id="issueBack">로그인으로 돌아가기</button></div>
           </div>
           <div class="panel hidden" id="challengePanel">
@@ -71,7 +71,7 @@
     </main>
     <div id="toast" role="status"></div>
     <dialog id="adminLogin"><form method="dialog" id="adminLoginForm"><span class="label">ADMIN ACCESS</span><h3>관리자 로그인</h3><p>관리자만 카드 발급 정보를 볼 수 있습니다.</p><input required type="password" id="adminPassword" placeholder="관리자 비밀번호" /><p class="form-error" id="adminError"></p><button class="primary full" value="login">관리자 로그인 <span>→</span></button><button class="dialog-cancel" value="cancel">취소</button></form></dialog>
-    <script type="module" src="./app.js?v=4"></script>
+    <script type="module" src="./app.js?v=5"></script>
   </body>
 </html>
 
