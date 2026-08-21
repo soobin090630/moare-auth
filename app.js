@@ -1,6 +1,6 @@
 const $ = (id) => document.getElementById(id);
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-import { getAuth, signInWithPopup, signOut, GoogleAuthProvider, OAuthProvider } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+import { getAuth, signInWithRedirect, getRedirectResult, signOut, GoogleAuthProvider, OAuthProvider } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
 const firebaseConfig = { apiKey:'AIzaSyDvCrm9kGb9eUk_u3aLUkKdPIA_8M7Ol3w', authDomain:'moare-auth.firebaseapp.com', projectId:'moare-auth', storageBucket:'moare-auth.firebasestorage.app', messagingSenderId:'696840303220', appId:'1:696840303220:web:4b7c881417e3e0338b5721', measurementId:'G-5FFDHDZJZ5' };
 const demoUser = { email: 'student@moa.test', password: 'moa2026!', cardId: 'M-2608-041', spacing: 11.2 };
 let activeUser = demoUser, challenge = null, timerId = null;
@@ -47,17 +47,23 @@ $('navLogout').onclick=reset;
 $('adminBtn').onclick=()=>{ $('adminPassword').value='';$('adminError').textContent='';$('adminLogin').showModal(); };$('adminBack').onclick=()=>{ $('admin').classList.add('hidden');show('welcome'); };$('adminLoginForm').onsubmit=(e)=>{e.preventDefault();if($('adminPassword').value==='admin2026!'){ $('adminLogin').close();showAdmin(); }else $('adminError').textContent='관리자 비밀번호가 올바르지 않습니다.';};$('printAll').onclick=()=>getUsers().forEach(u=>printCard(u.cardId));
 $('retryChallenge').onclick=()=>{$('code').disabled=false;startChallenge();};
 $('loginForm').onsubmit=(e)=>{e.preventDefault(); const email=$('email').value.trim(), pass=$('password').value; const saved=getUsers().find(u=>u.email===email); if((email===demoUser.email&&pass===demoUser.password)||(saved&&email===saved.email&&pass===saved.password)){activeUser=saved&&email===saved.email?saved:demoUser;startChallenge();}else $('loginError').textContent='이메일 또는 비밀번호를 확인해 주세요.';};
-async function socialLogin(providerName){
-  if(!firebaseReady){toast('먼저 firebase-config.js에 Firebase 설정값을 입력해 주세요.');return;}
-  try { const provider=providerName==='google'?new GoogleAuthProvider():new OAuthProvider('oidc.naver'); const result=await signInWithPopup(firebaseAuth,provider); const u=result.user; const saved=JSON.parse(localStorage.getItem('moaUser')||'null'); activeUser=saved&&saved.email===u.email?saved:{name:u.displayName||'',email:u.email||'',password:'',cardId:'M-'+String(Date.now()).slice(-7),spacing:9.5+Math.random()*4};localStorage.setItem('moaUser',JSON.stringify(activeUser));toast(`${u.displayName||u.email}님, 로그인되었습니다.`);startChallenge(); } catch(err){ $('loginError').textContent=err.code==='auth/popup-closed-by-user'?'로그인 창을 닫았습니다.':'소셜 로그인에 실패했습니다. Firebase 설정과 승인 도메인을 확인해 주세요.'; }
+function socialError(err){$('loginError').textContent=location.protocol==='file:'?'로컬 파일에서는 소셜 로그인을 사용할 수 없습니다. GitHub Pages 주소로 접속해 주세요.':err.code==='auth/unauthorized-domain'?'현재 웹 주소가 Firebase 승인 도메인에 없습니다. GitHub Pages 주소로 접속해 주세요.':`소셜 로그인에 실패했습니다 (${err.code||'알 수 없는 오류'}).`}
+function finishSocialUser(u,mode){
+  const saved=JSON.parse(localStorage.getItem('moaUser')||'null');
+  const user=saved&&saved.email===u.email?saved:{name:u.displayName||'',email:u.email||'',password:'',cardId:'M-'+String(Date.now()).slice(-7),spacing:9.5+Math.random()*4};
+  localStorage.setItem('moaUser',JSON.stringify(user)); activeUser=user;
+  if(mode==='signup'){$('email').value=user.email;$('password').value='';$('issuePanel').classList.add('hidden');$('loginPanel').classList.remove('hidden');$('authTitle').innerHTML='가입이 완료됐어요.<br />로그인해 주세요.';$('authText').innerHTML='소셜 계정과 카드 정보가 저장되었습니다.<br />같은 계정으로 로그인하면 인증이 시작됩니다.';$('loginError').textContent='';toast(`${u.displayName||u.email}님, 회원가입이 완료되었습니다.`)}else{toast(`${u.displayName||u.email}님, 로그인되었습니다.`);startChallenge()}
 }
-async function socialSignup(providerName){
-  if(!firebaseReady){toast('먼저 firebase-config.js에 Firebase 설정값을 입력해 주세요.');return;}
-  try { const provider=providerName==='google'?new GoogleAuthProvider():new OAuthProvider('oidc.naver'); const result=await signInWithPopup(firebaseAuth,provider); const u=result.user; const existing=JSON.parse(localStorage.getItem('moaUser')||'null'); const user=existing&&existing.email===u.email?existing:{name:u.displayName||'',email:u.email||'',password:'',cardId:'M-'+String(Date.now()).slice(-7),spacing:9.5+Math.random()*4}; localStorage.setItem('moaUser',JSON.stringify(user));activeUser=user;$('email').value=user.email;$('password').value='';$('issuePanel').classList.add('hidden');$('loginPanel').classList.remove('hidden');$('authTitle').innerHTML='가입이 완료됐어요.<br />로그인해 주세요.';$('authText').innerHTML='소셜 계정과 카드 정보가 저장되었습니다.<br />같은 계정으로 로그인하면 인증이 시작됩니다.';$('loginError').textContent='';toast(`${u.displayName||u.email}님, 회원가입이 완료되었습니다.`); } catch(err){ toast('소셜 회원가입에 실패했습니다. Firebase 설정을 확인해 주세요.'); }
+async function startSocial(providerName,mode){
+  if(!firebaseReady){toast('먼저 Firebase 설정을 확인해 주세요.');return;}
+  try { localStorage.setItem('moaSocialMode',mode); const provider=providerName==='google'?new GoogleAuthProvider():new OAuthProvider('oidc.naver'); await signInWithRedirect(firebaseAuth,provider); }
+  catch(err){socialError(err)}
 }
-$('googleBtn').onclick=()=>socialLogin('google'); $('naverBtn').onclick=()=>socialLogin('naver');
-$('googleSignupBtn').onclick=()=>socialSignup('google'); $('naverSignupBtn').onclick=()=>socialSignup('naver');
+if(firebaseAuth){getRedirectResult(firebaseAuth).then(result=>{if(result?.user){finishSocialUser(result.user,localStorage.getItem('moaSocialMode')||'login');localStorage.removeItem('moaSocialMode')}}).catch(socialError)}
+$('googleBtn').onclick=()=>startSocial('google','login'); $('naverBtn').onclick=()=>startSocial('naver','login');
+$('googleSignupBtn').onclick=()=>startSocial('google','signup'); $('naverSignupBtn').onclick=()=>startSocial('naver','signup');
 $('signupBtn').onclick=()=>{$('loginPanel').classList.add('hidden');$('issuePanel').classList.remove('hidden');$('authTitle').innerHTML='당신만의 간격을<br />만들어 드릴게요.';$('authText').innerHTML='카드에 들어갈 줄무늬 간격은 발급 후<br />변경되지 않는 개인 고유값입니다.';const p=9.5+Math.random()*4;const id='M-'+String(Date.now()).slice(-7);$('issuePitch').textContent=`PITCH — ${p.toFixed(2)} PX`;$('issueCardId').textContent=id;applyCardPitch(p,$('issuedCard'));$('issuePanel').dataset.pitch=p;$('issuePanel').dataset.cardId=id;};
 $('issueBack').onclick=()=>{$('issuePanel').classList.add('hidden');$('loginPanel').classList.remove('hidden');};
 $('issueForm').onsubmit=(e)=>{e.preventDefault();const user={name:$('issueName').value.trim(),email:$('issueEmail').value.trim(),password:$('issuePassword').value,cardId:$('issuePanel').dataset.cardId,spacing:Number($('issuePanel').dataset.pitch)};localStorage.setItem('moaUser',JSON.stringify(user));activeUser=user;$('email').value=user.email;$('password').value='';$('issuePanel').classList.add('hidden');$('loginPanel').classList.remove('hidden');$('authTitle').innerHTML='가입이 완료됐어요.<br />로그인해 주세요.';$('authText').innerHTML='발급된 카드 정보를 저장했습니다.<br />이메일과 비밀번호로 로그인하면 인증이 시작됩니다.';$('loginError').textContent='';toast(`${user.name}님의 카드 ${user.cardId}가 발급되었습니다. 이제 로그인해 주세요.`);};
 $('verifyForm').onsubmit=(e)=>{e.preventDefault();if(Date.now()>challenge.expires){$('verifyError').textContent='인증 시간이 만료되었습니다.';return;}if($('code').value===challenge.code){clearInterval(timerId);$('challengePanel').classList.add('hidden');$('successPanel').classList.remove('hidden');}else $('verifyError').textContent='코드가 일치하지 않습니다. 카드 위치를 확인해 주세요.';};
+
