@@ -38,3 +38,5 @@ Google 버튼은 Firebase의 `signInWithPopup`을 사용합니다. 네이버 버
 상단의 `관리자`를 누르고 데모 비밀번호 `admin2026!`을 입력하면 사용자 카드 ID·고유 간격을 확인하고 인쇄용 카드 창을 열 수 있습니다. 현재 목록은 브라우저 Local Storage를 읽습니다. 실제 운영에서는 Firebase Auth Custom Claims와 Firestore Security Rules로 관리자 권한을 보호해야 합니다.
 
 관리자 목록의 `투명 필름 인쇄` 버튼은 카드 배경을 투명으로 만든 뒤 브라우저의 기본 인쇄 대화상자를 호출합니다. 인쇄 설정에서 실제 투명 필름 용지를 선택하고 `배경 그래픽`은 끄는 것을 권장합니다.
+
+\n\n<!-- pages refresh -->
