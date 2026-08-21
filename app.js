@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
 import { getAuth, signInWithPopup, signOut, GoogleAuthProvider, OAuthProvider } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
-import { firebaseConfig } from './firebase-config.js';
+const firebaseConfig = { apiKey:'AIzaSyDvCrm9kGb9eUk_u3aLUkKdPIA_8M7Ol3w', authDomain:'moare-auth.firebaseapp.com', projectId:'moare-auth', storageBucket:'moare-auth.firebasestorage.app', messagingSenderId:'696840303220', appId:'1:696840303220:web:4b7c881417e3e0338b5721', measurementId:'G-5FFDHDZJZ5' };
 const demoUser = { email: 'student@moa.test', password: 'moa2026!', cardId: 'M-2608-041', spacing: 11.2 };
 let activeUser = demoUser, challenge = null, timerId = null;
 let firebaseAuth = null;
