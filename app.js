@@ -60,8 +60,8 @@ async function startSocial(providerName,mode){
   catch(err){socialError(err)}
 }
 if(firebaseAuth){getRedirectResult(firebaseAuth).then(result=>{if(result?.user){finishSocialUser(result.user,localStorage.getItem('moaSocialMode')||'login');localStorage.removeItem('moaSocialMode')}}).catch(socialError)}
-$('googleBtn').onclick=()=>startSocial('google','login'); $('naverBtn').onclick=()=>startSocial('naver','login');
-$('googleSignupBtn').onclick=()=>startSocial('google','signup'); $('naverSignupBtn').onclick=()=>startSocial('naver','signup');
+ $('googleBtn').onclick=()=>startSocial('google','login');
+ $('googleSignupBtn').onclick=()=>startSocial('google','signup');
 // 웹 페이지는 운영체제의 화면 캡처를 완전히 차단할 수 없지만, 일반적인 복사·저장·인쇄 단축키와 우클릭을 제한합니다.
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('copy',e=>e.preventDefault());
